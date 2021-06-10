@@ -2,6 +2,9 @@ package com.nacro.validator.case
 
 import android.util.Patterns
 import com.nacro.validator.error
+import com.nacro.validator.pattern.email
+import com.nacro.validator.pattern.letterAndDigit
+import com.nacro.validator.pattern.phone
 
 object StringScope {
 
@@ -14,15 +17,20 @@ object StringScope {
     }
 
     fun String.validEmailFormat(): ErrorAction {
-        return !contains(Patterns.EMAIL_ADDRESS.toRegex()) error "email format invalid"
+        return matchRe(email, "email format invalid")
     }
 
     fun String.validPhoneFormat(): ErrorAction {
-        return !contains(Patterns.PHONE.toRegex()) error "phone number format invalid"
+        return matchRe(phone, "phone number format invalid")
     }
 
+    fun String.wordAndDigitOnly(): ErrorAction {
+        return matchRe(letterAndDigit, "must have word and digit, exclude !@#$%... etc.")
+    }
+
+
     fun String.matchRe(re: Regex, errorMsg: String): ErrorAction {
-        return !contains(re) error errorMsg
+        return !matches(re) error errorMsg
     }
 
     fun String.sameWith(s: String): ErrorAction {
