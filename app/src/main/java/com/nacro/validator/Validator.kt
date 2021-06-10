@@ -1,6 +1,6 @@
 package com.nacro.validator
 
-import kotlin.Exception
+import com.nacro.validator.case.ErrorAction
 
 fun <T> check(content: T, condition: T.() -> List<String>): Result<Unit> {
     val errors = condition(content)
@@ -11,28 +11,18 @@ fun <T> check(content: T, condition: T.() -> List<String>): Result<Unit> {
     }
 }
 
-fun allCondition(vararg conditions: () -> String?): List<String> {
-    val out = arrayListOf<String>()
-    for (c in conditions) {
-        c()?.let { out.add(it) }
-    }
-    return out
-}
-
-fun anyCondition(vararg conditions: () -> String?): List<String> {
+fun constraint(checkAll: Boolean, conditions: Array<ErrorAction>): List<String> {
     val out = arrayListOf<String>()
     for (c in conditions) {
         c()?.let {
             out.add(it)
-            return out
+            if (!checkAll) return out
         }
     }
     return out
 }
 
 
-infix fun (Boolean).error(msg: String): (() -> String?) {
-    return {
-        if (this) msg else null
-    }
+infix fun (Boolean).error(msg: String): ErrorAction {
+    return { if (this) msg else null }
 }

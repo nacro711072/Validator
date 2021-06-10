@@ -1,6 +1,10 @@
 package com.nacro.validator.test
 
 import com.nacro.validator.*
+import com.nacro.validator.case.IntScope.validRange
+import com.nacro.validator.case.StringScope.alertNonEmpty
+import com.nacro.validator.case.StringScope.matchRe
+import com.nacro.validator.case.StringScope.validSize
 
 fun main() {
     println("=========check string=========")
@@ -11,10 +15,12 @@ fun main() {
 
 fun testCase1(content: String) {
     val checkStr = check(content) {
-        allCondition(
-            isEmpty() error "can't be empty",
-            (length !in 6..8) error "length must in [6, 8]",
-            !contains(Regex("\\d+")) error "must has digit"
+        constraint(true,
+            arrayOf(
+                alertNonEmpty(),
+                validSize(6..8),
+                matchRe(Regex("\\d+"), "must has digit")
+            )
         )
     }
 
@@ -27,9 +33,11 @@ fun testCase1(content: String) {
 
 fun testCase2(content: Int) {
     val checkInt = check(content) {
-        anyCondition(
-            (this !in (100 until 1000)) error "the value must in [100. 1000)",
-            (this % 2 == 0) error "the value must be odd"
+        constraint(false,
+            arrayOf(
+                validRange((100 until 1000)),
+                (this % 2 == 0) error "the value must be odd"
+            )
         )
     }
 
