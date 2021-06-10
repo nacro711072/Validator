@@ -15,8 +15,8 @@ fun main() {
 
 fun testCase1(content: String) {
     val checkStr = check(content) {
-        constraint(true,
-            arrayOf(
+        constraint(checkAll = true,
+            conditions = arrayOf(
                 alertNonEmpty(),
                 validSize(6..8),
                 matchRe(Regex("\\d+"), "must has digit")
@@ -33,8 +33,8 @@ fun testCase1(content: String) {
 
 fun testCase2(content: Int) {
     val checkInt = check(content) {
-        constraint(false,
-            arrayOf(
+        constraint(checkAll = false,
+            conditions = arrayOf(
                 validRange((100 until 1000)),
                 (this % 2 == 0) error "the value must be odd"
             )
