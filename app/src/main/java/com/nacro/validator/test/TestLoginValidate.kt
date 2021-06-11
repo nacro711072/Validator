@@ -3,23 +3,23 @@ package com.nacro.validator.test
 import com.nacro.validator.case.logic.LoginValidator
 
 fun main() {
-    testAccount()
-    testPassword()
+    val validator = LoginValidator()
+    testAccount(validator)
+    testPassword(validator)
 }
 
-fun testAccount() {
-    val validator = LoginValidator()
+fun testAccount(validator: LoginValidator) {
 
     val account = "wdwfe@asc.com"
     val invalidAccount = "wdwfe@1!!asc.com"
 
     println("===test account: $account ===")
-    with(validator.account(account)) {
+    with(validator.accountChecker(account)) {
         ifError { println(it.message) }
         ifSuccess { println("validate success, account: $account") }
     }
     println("===test account: $invalidAccount ===")
-    with(validator.account(invalidAccount)) {
+    with(validator.accountChecker(invalidAccount)) {
         ifError { println(it.message) }
         ifSuccess { println("validate success, account: $invalidAccount") }
     }
@@ -32,18 +32,18 @@ fun testPassword(validator: LoginValidator) {
     val inValidPassword2 = "aa11092%^^"
 
     println("===test password: $password ===")
-    with(validator.password(password)) {
+    with(validator.passwordChecker(password)) {
         ifError { println(it.message) }
         ifSuccess { println("validate success, password: $password") }
     }
     println("===test password: $inValidPassword1 ===")
-    with(validator.password(inValidPassword1)) {
+    with(validator.passwordChecker(inValidPassword1)) {
         ifError { println(it.message) }
         ifSuccess { println("validate success, password: $inValidPassword1") }
     }
 
     println("===test password: $inValidPassword2 ===")
-    with(validator.password(inValidPassword2)) {
+    with(validator.passwordChecker(inValidPassword2)) {
         ifError { println(it.message) }
         ifSuccess { println("validate success, password: $inValidPassword2") }
     }
